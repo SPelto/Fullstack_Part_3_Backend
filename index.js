@@ -1,7 +1,20 @@
 const express = require('express')
 const app = express()
+const morgan = require('morgan')
+
+const originalSend = app.response.send
+
+app.response.send = function sendOverWrite(body) {
+  originalSend.call(this, body)
+  this.__custombody__ = JSON.stringify(body).replace(/[\\]/g,"").replace(/,"id":\d+/g,"").slice(1,-1)
+}
+
+morgan.token('res-body', function(_req, res) {
+  return res.__custombody__
+})
 
 app.use(express.json())
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :res-body'));
 
 let persons = [
     {
@@ -92,7 +105,6 @@ app.post('/api/persons', (request, response) => {
     }
 
     persons = persons.concat(person)
-
     response.json(person)
 })
 
