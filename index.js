@@ -1,18 +1,19 @@
 const express = require('express')
-const app = express()
 const morgan = require('morgan')
 const cors = require('cors')
 
+const app = express()
+const Person = require('./models/person')
 
 const originalSend = app.response.send
 
 app.response.send = function sendOverWrite(body) {
-  originalSend.call(this, body)
-  this.__custombody__ = JSON.stringify(body).replace(/[\\]/g,"").replace(/,"id":\d+/g,"").slice(1,-1)
+    originalSend.call(this, body)
+    this.__custombody__ = JSON.stringify(body).replace(/[\\]/g, "").replace(/,"id":\d+/g, "").slice(1, -1)
 }
 
-morgan.token('res-body', function(_req, res) {
-  return res.__custombody__
+morgan.token('res-body', function (_req, res) {
+    return res.__custombody__
 })
 
 app.use(cors())
@@ -21,28 +22,7 @@ app.use(express.static('build'))
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :res-body'));
 
 
-let persons = [
-    {
-        "name": "Arto Hellas",
-        "number": "040-123456",
-        "id": 1
-    },
-    {
-        "name": "Ada Lovelace",
-        "number": "39-44-5323523",
-        "id": 2
-    },
-    {
-        "name": "Dan Abramov",
-        "number": "12-43-234345",
-        "id": 3
-    },
-    {
-        "name": "Mary Poppendieck",
-        "number": "39-23-6423122",
-        "id": 4
-    }
-]
+
 app.get('/', (request, response) => {
     response.send('<h1>Hello World!</h1>')
 })
@@ -59,8 +39,10 @@ app.get('/info', (request, response) => {
     )
 })
 
-app.get('/api/persons', (req, res) => {
-    res.json(persons)
+app.get('/api/persons', (request, response) => {
+    Person.find({}).then(result => {
+        response.send(result)
+    })
 })
 
 app.get('/api/persons/:id', (request, response) => {
