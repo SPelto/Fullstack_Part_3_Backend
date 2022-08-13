@@ -10,14 +10,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/SPelto/Fullstack_Part_3.git"
+    "url": "git+https://github.com/SPelto/Fullstack_Part_3_Backend.git"
   },
   "author": "Samuli Peltonen",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/SPelto/Fullstack_Part_3/issues"
+    "url": "https://github.com/SPelto/Fullstack_Part_3_Backend/issues"
   },
-  "homepage": "https://github.com/SPelto/Fullstack_Part_3#readme",
+  "homepage": "https://github.com/SPelto/Fullstack_Part_3_Backend#readme",
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.18.1",
