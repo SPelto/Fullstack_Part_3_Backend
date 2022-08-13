@@ -16,7 +16,7 @@ app.response.send = function sendOverWrite(body) {
 morgan.token('res-body', function (_req, res) {
     return res.__custombody__
 })
-    
+
 app.use(cors())
 app.use(express.json())
 app.use(express.static('build'))
@@ -58,30 +58,31 @@ app.get('/api/persons/:id', (request, response) => {
     }
 })
 app.post('/api/persons', (request, response) => {
-    
+
     const body = request.body
-    persons = Person.find({}).then(result => {
-        response.send(result)
-    })
-
-    if (persons.some(person => person.name === body.name)) {
-        return response.status(400).json({
-            error: 'name must be unique'
-        })
-    }
-    if (persons.some(person => person.number === body.number)) {
-        return response.status(400).json({
-            error: 'number must be unique'
-        })
-    }
-
-    const person = {
+    // if (persons.some(person => person.name === body.name)) {
+    //     return response.status(400).json({
+    //         error: 'name must be unique'
+    //     })
+    // }
+    // if (persons.some(person => person.number === body.number)) {
+    //     return response.status(400).json({
+    //         error: 'number must be unique'
+    //     })
+    // }
+    const newPerson = new Person({
         name: body.name,
         number: body.number,
-    }
+    })
 
-    persons = persons.concat(person)
-    response.json(person)
+    console.log(newPerson)
+    newPerson.save()
+    // person.save().then(result => {
+    //     console.log(`added ${body.name} number ${body.number} to phonebook`)
+    // })
+
+    // persons = persons.concat(newPerson)
+    // response.json(newPerson)
 })
 
 app.delete('/api/persons/:id', (request, response) => {
@@ -89,6 +90,11 @@ app.delete('/api/persons/:id', (request, response) => {
     persons = persons.filter(note => note.id !== id)
 
     response.status(204).end()
+    // Person.findByIdAndRemove(request.params.id)
+    // .then(result => {
+    //   response.status(204).end()
+    // })
+    // .catch(error => next(error))
 })
 
 const generateId = () => {
