@@ -1,6 +1,7 @@
 const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
+require('dotenv').config()
 
 const app = express()
 const Person = require('./models/person')
@@ -15,7 +16,7 @@ app.response.send = function sendOverWrite(body) {
 morgan.token('res-body', function (_req, res) {
     return res.__custombody__
 })
-
+    
 app.use(cors())
 app.use(express.json())
 app.use(express.static('build'))
@@ -95,7 +96,7 @@ app.post('/api/persons', (request, response) => {
     response.json(person)
 })
 
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
 })
