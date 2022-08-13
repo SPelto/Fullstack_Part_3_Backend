@@ -39,6 +39,14 @@ app.get('/api/info', (request, response) => {
   })
 })
 
+app.get('/info', (request, response) => {
+  Person.find({}).then(result => {
+    const message = `<p> Phonebook has info for ${result.length} people</p>
+          <p>${new Date()}</p>`
+    response.send(message)
+  })
+})
+
 app.get('/api/persons', (request, response) => {
   Person.find({}).then(result => {
     response.send(result)
